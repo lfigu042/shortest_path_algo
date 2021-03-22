@@ -1,0 +1,4 @@
+Conclusions (Word or PDF file): 
+what challenges did you find in implementing a solution this project? 
+What did you learn? 
+Include graphical output.
