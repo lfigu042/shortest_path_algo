@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
 
+
 public class Main {
 
     public static void main(String[] args) {
@@ -17,54 +18,64 @@ public class Main {
         frame.setVisible(true);
     }
     /**
-        dijkstra algorithm implementation from textbook ch 8 pg 259
-        defines a shortest-path spanning tree rooted in s.
-        provides the shortest path from s to all other vertices, not just t.
-
+     START OF DIJKSTRAS
+     https://www.softwaretestinghelp.com/dijkstras-algorithm-in-java/
      **/
-//    int dijkstra(int graph *g, int start) {
-//        int i;                      /* counter */
-//        edgenode * p;               /* temporary pointer */
-//        boolean intree[ MAXV + 1];  /* is the vertex in the tree yet? */
-//        int distance[ MAXV + 1];    /* cost of adding to tree */
-//        int v;                      /* current vertex to process */
-//        int w;                      /* candidate next vertex */
-//        int dist;                   /* cheapest cost to enlarge tree */
-//        int weight = 0;             /* tree weight */
-//        for (i = 1; i <= g -> nvertices; i++) {
-//            intree[i] = false;
-//            distance[i] = MAXINT;
-//            parent[i] = -1;
-//        }
-//        distance[start] = 0;
-//        v = start;
-//
-//        while (!intree[v]) {
-//            intree[v] = true;
-//            if (v != start) {
-//                printf("edge (%d,%d) in tree \n", parent[v], v);
-//                weight = weight + dist;
-//            }
-//            p = g -> edges[v];
-//            while (p != NULL) {
-//                w = p -> y;
-//                if (distance[w] > (distance[v] + p -> weight)) { /* CHANGED */
-//                    distance[w] = distance[v] + p -> weight; /* CHANGED */
-//                    parent[w] = v; /* CHANGED */
-//                }
-//                p = p -> next;
-//            }
-//            dist = MAXINT;
-//            for (i = 1; i <= g -> nvertices; i++) {
-//                if ((!intree[i]) && (dist > distance[i])) {
-//                    dist = distance[i];
-//                    v = i;
-//                }
-//            }
-//        }
-//        return (weight);
-//    }
+    static void algo_dijkstra(int graph[][], int src_node, int num_Vertices)  {
+        int path_array[] = new int[num_Vertices]; // The output array. dist[i] will hold
+        // the shortest distance from src to i
 
+        // spt (shortest path set) contains vertices that have shortest path
+        Boolean sptSet[] = new Boolean[num_Vertices];
+
+        // Initially all the distances are INFINITE and stpSet[] is set to false
+        for (int i = 0; i < num_Vertices; i++) {
+            path_array[i] = Integer.MAX_VALUE;
+            sptSet[i] = false;
+        }
+
+        // Path between vertex and itself is always 0
+        path_array[src_node] = 0;
+        // now find shortest path for all vertices
+        for (int count = 0; count < num_Vertices - 1; count++) {
+            // call minDistance method to find the vertex with min distance
+            int u = minDistance(path_array, sptSet, num_Vertices);
+            // the current vertex u is processed
+            sptSet[u] = true;
+            // process adjacent nodes of the current vertex
+            for (int v = 0; v < num_Vertices; v++)
+
+                // if vertex v not in sptset then update it
+                if (!sptSet[v] && graph[u][v] != 0 && path_array[u] !=
+                        Integer.MAX_VALUE && path_array[u]
+                        + graph[u][v] < path_array[v])
+                    path_array[v] = path_array[u] + graph[u][v];
+        }
+
+        // print the path array
+        printMinpath(path_array, num_Vertices);
+    }
+    // print the array of distances (path_array)
+    static void printMinpath(int path_array[], int num_Vertices)   {
+        System.out.println("Vertex# \t Minimum Distance from Source");
+        for (int i = 0; i < num_Vertices; i++)
+            System.out.println(i + " \t\t\t " + path_array[i]);
+    }
+    static int minDistance(int path_array[], Boolean sptSet[], int num_Vertices)   {
+        // Initialize min value
+        int min = Integer.MAX_VALUE, min_index = -1;
+        for (int v = 0; v < num_Vertices; v++)
+            if (sptSet[v] == false && path_array[v] <= min) {
+                min = path_array[v];
+                min_index = v;
+            }
+
+        return min_index;
+    }
+    /**
+     END OF DIJKSTRAS
+     https://www.softwaretestinghelp.com/dijkstras-algorithm-in-java/
+     **/
     public static void ReadInputFromTextFile() { //added 'void' to stop error
         readGraph();
     }
@@ -83,22 +94,31 @@ public class Main {
         }
         int numberOfVertices = 0;
         int mat_i_j = 0;
+        int[][] graph_matrix;
+        int s,t; //start and target
+        Graph my_graph; //create graph with parameters from file
         while (in.hasNextLine()) {
             numberOfVertices = in.nextInt();
             System.out.println("Number of vertices: " + numberOfVertices);
+            graph_matrix = new int[numberOfVertices][numberOfVertices]; //creating 2d array for file matrix
+
             System.out.println("Matrix: ");
             for (int i = 0; i < numberOfVertices; i++) {
                 for (int j = 0; j < numberOfVertices; j++) {
                     mat_i_j = in.nextInt();
                     System.out.print(mat_i_j + " ");
+                    graph_matrix[i][j] = mat_i_j;
                 }
                 System.out.println();
             }
-            int s = in.nextInt();
-            int t = in.nextInt();
+            s = in.nextInt();
+            t = in.nextInt();
             System.out.print("S and T are:  ");
             System.out.println(s + " " + t);
+            my_graph = new Graph(numberOfVertices, graph_matrix); //how to send this off?
+            algo_dijkstra(graph_matrix, s, t);
         }
+
         in.close();
     }
 
@@ -116,7 +136,7 @@ public class Main {
      * Implements a Graph. Uses an adjacency matrix to represent the graph. *
      * * @author Prof. Antonio Hernandez
      */
-    public class Graph implements GraphInterface {
+    public static class Graph implements GraphInterface {
         private int verticesNumber;
         private int[][] matrix; //adjacency matrix
 
@@ -130,16 +150,38 @@ public class Main {
             matrix = new int[verticesNumber][verticesNumber];
         }
 
-        public void addEdge(int v, int w) {
-            matrix[v][w] = 1;
-            matrix[w][v] = 1;
+        public Graph(int n, int[][] m) {
+            verticesNumber = n;
+            matrix = m;
+        }
+        public int getVertices(){
+            return verticesNumber;
+        }
+        public int[][] getMatrix(){
+            return matrix;
+        }
+        public void addEdge(int i, int j ) {
+            matrix[i][j] = 1;
+            matrix[j][i] = 1;
+        }
+        public void addEdge(int i, int j, int w ) { // w is weight of Edge
+            matrix[i][j] = w;
+            matrix[j][i] = w;
         }
 
-        public void removeEdge(int v, int w) {
-            matrix[v][w] = 0;
-            matrix[w][v] = 0;
+        public void removeEdge(int i, int j) {
+            matrix[i][j] = 0;
+            matrix[j][i] = 0;
         }
-
+        public void printMatrix(){
+            System.out.println("Printing matrix...");
+            for (int i = 0; i < verticesNumber; i++) {
+                for (int j = 0; j < verticesNumber; j++) {
+                    System.out.print(matrix[i][j]+ " ");
+                }
+                System.out.println();
+            }
+        }
         /**
          * Finds vertices adjacent to a given vertex.
          * * @param v given vertex
@@ -196,7 +238,7 @@ public class Main {
             g.setColor(Color.BLACK);
             g.drawOval(leftX, topY, width, height);
             g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
-            g.drawString("1", leftX + labelX, topY + labelY);        //draw vertex 2
+            g.drawString("1", leftX + labelX, topY + labelY);       //draw vertex 2
             g.setColor(Color.ORANGE);
             g.fillOval(leftX + gridWidth, topY, width, height);
             g.setColor(Color.BLACK);
