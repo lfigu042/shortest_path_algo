@@ -16,6 +16,54 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
+    /**
+        dijkstra algorithm implementation from textbook ch 8 pg 259
+        defines a shortest-path spanning tree rooted in s.
+        provides the shortest path from s to all other vertices, not just t.
+
+     **/
+//    int dijkstra(int graph *g, int start) {
+//        int i;                      /* counter */
+//        edgenode * p;               /* temporary pointer */
+//        boolean intree[ MAXV + 1];  /* is the vertex in the tree yet? */
+//        int distance[ MAXV + 1];    /* cost of adding to tree */
+//        int v;                      /* current vertex to process */
+//        int w;                      /* candidate next vertex */
+//        int dist;                   /* cheapest cost to enlarge tree */
+//        int weight = 0;             /* tree weight */
+//        for (i = 1; i <= g -> nvertices; i++) {
+//            intree[i] = false;
+//            distance[i] = MAXINT;
+//            parent[i] = -1;
+//        }
+//        distance[start] = 0;
+//        v = start;
+//
+//        while (!intree[v]) {
+//            intree[v] = true;
+//            if (v != start) {
+//                printf("edge (%d,%d) in tree \n", parent[v], v);
+//                weight = weight + dist;
+//            }
+//            p = g -> edges[v];
+//            while (p != NULL) {
+//                w = p -> y;
+//                if (distance[w] > (distance[v] + p -> weight)) { /* CHANGED */
+//                    distance[w] = distance[v] + p -> weight; /* CHANGED */
+//                    parent[w] = v; /* CHANGED */
+//                }
+//                p = p -> next;
+//            }
+//            dist = MAXINT;
+//            for (i = 1; i <= g -> nvertices; i++) {
+//                if ((!intree[i]) && (dist > distance[i])) {
+//                    dist = distance[i];
+//                    v = i;
+//                }
+//            }
+//        }
+//        return (weight);
+//    }
 
     public static void ReadInputFromTextFile() { //added 'void' to stop error
         readGraph();
@@ -111,16 +159,16 @@ public class Main {
         }
     }
 
-//    public String toString() {
-//        String s = "";
-//        for (int i = 0; i < verticesNumber; i++) {
-//            for (int j = 0; j < verticesNumber; j++) {
-//                s += matrix[i][j] + " ";
-//            }
-//            s += "\n";
-//        }
-//        return s;
-//    }
+    public String toString(int[][] matrix, int verticesNumber) {
+        String s = "";
+        for (int i = 0; i < verticesNumber; i++) {
+            for (int j = 0; j < verticesNumber; j++) {
+                s += matrix[i][j] + " ";
+            }
+            s += "\n";
+        }
+        return s;
+    }
 
     public static class FrameDisplay extends JFrame {
         int WIDTH = 450;
