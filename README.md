@@ -14,10 +14,17 @@ separated by a space
 3-> s and t, separated by a space
 
 EXAMPLE INPUT
+
 5 
+
 0 6 1 3 0
+
 1 0 2 4 0
+
 3 7 4 1 0
+
 6 1 5 0 2
+
 0 0 0 9 0
+
 0 3
