@@ -16,10 +16,16 @@ separated by a space
 EXAMPLE INPUT
 
 5
+
 0  2  3  0  0
+
 2  0  15 2  0
+
 3  15 0  0  13
+
 0  2  0  0  9
+
 0  0  13 9  0
+
 0 3
 
