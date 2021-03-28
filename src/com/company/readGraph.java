@@ -1,5 +1,4 @@
 package com.company;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -53,6 +52,7 @@ public class readGraph {
             }
             s = in.nextInt();
             t = in.nextInt();
+            //v = numberOfVertices;
 //            System.out.print("S and T are:  ");
 //            System.out.println(s + " " + t);
 
